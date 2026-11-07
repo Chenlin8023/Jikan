@@ -1,0 +1,128 @@
+"jikan.common.action.cancel" = "取消";
+"jikan.common.action.ok" = "好";
+"jikan.common.action.save" = "保存";
+
+"jikan.inline.format.hr" = "%ld 小时";
+"jikan.inline.format.hr_min" = "%ld 小时 %ld 分";
+"jikan.inline.format.lt1min" = "<1 分";
+"jikan.inline.format.min" = "%ld 分";
+"jikan.inline.format.to_target" = "%@后充至 %ld%%";
+
+"jikan.notification.target_reached.message" = "电池电量已达到 %ld%% 的充电目标。";
+
+"jikan.platter.accessibility.next_item" = "显示下一个堆叠项目";
+
+"jikan.platter.label.battery_temperature" = "电池温度";
+"jikan.platter.label.battery_voltage" = "电池电压";
+"jikan.platter.label.charged" = "已充电";
+"jikan.platter.label.current_wattage" = "当前功率";
+"jikan.platter.label.target_reached" = "已达目标";
+"jikan.platter.label.until_fully_charged" = "直至充满";
+"jikan.platter.label.until_target" = "充电至 %ld%% 前";
+
+"jikan.platter.preview.eta" = "1 小时 23 分";
+"jikan.platter.preview.time" = "0 分钟";
+
+"jikan.prefs.alert.detect_limit.none.message" = "未检测到 ChargeLimiter 上限，将使用 100%。";
+"jikan.prefs.alert.detect_limit.none.title" = "未找到电池上限";
+"jikan.prefs.alert.detect_limit.single.message" = "已应用电池上限：%ld%%";
+"jikan.prefs.alert.detect_limit.single.title" = "已检测到 ChargeLimiter";
+"jikan.prefs.alert.detect_limit.unchanged.message" = "未检测到 ChargeLimiter 上限，预估目标未更改。";
+"jikan.prefs.alert.detect_limit.unsupported.message" = "ChargeLimiter 报告的上限为 %@%%。Apple 目标仅支持 80、85、90、95 和 100%%，预估目标未更改。";
+"jikan.prefs.alert.detect_limit.unsupported.title" = "不支持的 Apple 目标";
+"jikan.prefs.alert.limit_sources.applied.message" = "上次从 ChargeLimiter 应用：%ld%%";
+"jikan.prefs.alert.limit_sources.title" = "已与 ChargeLimiter 同步";
+"jikan.prefs.alert.reset_pill_position.prompt" = "要重置竖屏/横屏胶囊位置和轴向锁定吗？";
+"jikan.prefs.alert.reset_pill_position.title" = "重置胶囊位置";
+"jikan.prefs.alert.reset_preferences.prompt" = "要将 Jikan 的所有设置恢复为默认值吗？";
+"jikan.prefs.alert.reset_preferences.title" = "重置设置";
+"jikan.prefs.alert.slider_invalid.message" = "请输入 %.0f 到 %.0f 之间的有效数字。";
+"jikan.prefs.alert.slider_range.message" = "请输入 %.0f 到 %.0f 之间的值";
+
+"jikan.prefs.algorithm.apple_description" = "使用 Apple 充电模型的本地固定副本，可选择 80%、85%、90%、95% 或 100%。";
+"jikan.prefs.algorithm.apple_unavailable" = "近期部分电池读数不可用。即使使用估算输入功率，Apple 预测也可能仍不可用。";
+"jikan.prefs.algorithm.apple_estimation_enabled" = "已启用基于充电器的近似估算，使用该方式的预估会标注 ≈。选择 Jikan 可将其关闭。";
+"jikan.prefs.algorithm.warning.title" = "预估充电功率";
+"jikan.prefs.algorithm.warning.message" = "此设备无法提供准确的实测输入功率。现在切换模型将使用估算来源，可能导致预估不准确。";
+"jikan.prefs.algorithm.warning.allow" = "继续";
+"jikan.prefs.algorithm.jikan_description" = "根据充电历史和当前电池读数预估时间，可选择 1% 到 100% 之间的任意目标。";
+"jikan.prefs.algorithm.recommended" = "推荐";
+
+"jikan.prefs.footer.estimate_beside_date_unavailable" = "仅在 iOS 14 或更高版本上可用。";
+"jikan.prefs.footer.quick_actions_unavailable" = "此设备不支持快捷操作按钮";
+"jikan.prefs.footer.slider_hint" = "长按滑块圆点以编辑";
+
+"jikan.prefs.header.subtitle" = "在锁定屏幕上显示充满电所需的时间";
+
+"jikan.prefs.legend.slow_charging" = "慢速充电";
+
+"jikan.prefs.row.algorithm" = "算法";
+"jikan.prefs.row.enable" = "启用";
+"jikan.prefs.row.estimate_beside_date" = "改用日期行";
+"jikan.prefs.row.estimate_source" = "来源";
+"jikan.prefs.row.estimate_target" = "预估目标";
+"jikan.prefs.row.estimate_target_percent" = "预估目标 (%)";
+"jikan.prefs.row.hide_quick_action_buttons" = "隐藏快捷操作按钮";
+"jikan.prefs.row.hide_swipe_to_unlock_text" = "隐藏“滑动解锁”文字";
+"jikan.prefs.row.hide_focus_indicator" = "隐藏专注模式指示器";
+"jikan.prefs.row.landscape" = "横屏";
+"jikan.prefs.row.landscape_x" = "横屏 X";
+"jikan.prefs.row.landscape_y" = "横屏 Y";
+"jikan.prefs.row.lock_x_axis" = "锁定 X 轴";
+"jikan.prefs.row.lock_y_axis" = "锁定 Y 轴";
+"jikan.prefs.row.notify_when_target_reached" = "达到目标时通知";
+"jikan.prefs.row.only_while_charging" = "仅在充电时";
+"jikan.prefs.row.opacity" = "不透明度";
+"jikan.prefs.row.pill_background_opacity" = "胶囊背景不透明度 (%)";
+"jikan.prefs.row.portrait" = "竖屏";
+"jikan.prefs.row.portrait_x" = "竖屏 X";
+"jikan.prefs.row.portrait_y" = "竖屏 Y";
+"jikan.prefs.row.reset_pill_position" = "重置胶囊位置";
+"jikan.prefs.row.reset_to_defaults" = "恢复默认设置";
+"jikan.prefs.row.show_after_full_charge" = "达到目标后继续显示";
+"jikan.prefs.row.show_preview" = "显示预览";
+"jikan.prefs.row.stack" = "堆叠";
+"jikan.prefs.row.sync_with_chargelimiter" = "与 ChargeLimiter 同步";
+
+"jikan.prefs.section.battery_estimate" = "时间预估";
+"jikan.prefs.section.miscellaneous" = "其他";
+"jikan.prefs.section.pill_display" = "胶囊显示";
+"jikan.prefs.section.pill_position" = "胶囊位置";
+"jikan.prefs.section.pill_preview" = "胶囊预览";
+"jikan.prefs.section.pill_style" = "胶囊样式";
+"jikan.prefs.section.reset" = "重置";
+
+"jikan.prefs.slider.estimate_target.title" = "预估目标";
+"jikan.prefs.slider.landscape_x.title" = "横屏 X";
+"jikan.prefs.slider.landscape_y.title" = "横屏 Y";
+"jikan.prefs.slider.opacity.title" = "胶囊背景不透明度";
+"jikan.prefs.slider.portrait_x.title" = "竖屏 X";
+"jikan.prefs.slider.portrait_y.title" = "竖屏 Y";
+
+"jikan.stack.action.add_estimate" = "添加预估";
+"jikan.stack.item.estimate" = "预估时间";
+"jikan.stack.item.estimate_target" = "预估至 %ld%%";
+"jikan.stack.item.temperature" = "温度";
+"jikan.stack.item.voltage" = "电压";
+"jikan.stack.item.wattage" = "功率";
+
+"jikan.stack.section.active" = "使用中";
+"jikan.stack.section.available" = "可添加";
+"jikan.stack.section.unit" = "温度单位";
+
+"jikan.stack.target.duplicate" = "该目标已被主预估或其他堆叠预估使用。";
+"jikan.stack.target.hint" = "请为此预估选择其他目标。当显示的目标达成后，胶囊会前进至下一个更高的未完成目标。";
+"jikan.stack.target.main" = "主目标：%ld%%";
+"jikan.stack.target.unique" = "请输入未使用的目标。Apple 预估支持 80、85、90、95 和 100%。Jikan 预估支持 1–100%。";
+"jikan.stack.target.unsupported" = "Apple 预估不支持 %ld%%";
+"jikan.stack.unit.celsius" = "摄氏度";
+"jikan.stack.unit.fahrenheit" = "华氏度";
+
+"jikan.tt100.format.hr" = "%d 小时";
+"jikan.tt100.format.hr_min" = "%d 小时 %d 分";
+"jikan.tt100.format.lt1min" = "<1 分钟";
+"jikan.tt100.format.min" = "%d 分钟";
+
+"jikan.tt100.value.na" = "N/A";
+
+"jikan.prefs.algorithm.checking" = "尚未确认 Apple 输入是否可用。Jikan 会在设备充电时检查；暂时缺失的读数不会改变先前已确认的推荐。";
