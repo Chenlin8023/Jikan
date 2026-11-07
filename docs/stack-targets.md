@@ -1,31 +1,33 @@
-# Additional Stack targets
+# 额外的 Stack 目标
 
-The main Estimated Time item follows the target in Jikan's main settings and stays first. Additional estimates have their own percentage and can be edited, reordered, or removed in Stack. Apple mode supports 80/85/90/95/100%; Jikan mode supports 1–100%. Existing saved values are preserved across algorithm changes, with unsupported Apple percentages shown as unavailable. Duplicate effective percentages are omitted from the pill without deleting the saved entry.
+> 本文档翻译自英文原版，如有歧义以原文为准。
 
-Manual taps follow Stack order. Automatic advancement follows percentage order, only when the displayed estimate newly reaches its target. Other readings remain selected. Completed milestones stay completed for the charging session, and a manual visit to one does not immediately advance again. Once all targets are completed, Show after full charge controls visibility. There is no scheduling or charging-limit control.
+主「预计时间」条目跟随 Jikan 主设置中的目标，并始终排在首位。额外估算各有自己的百分比，可在 Stack 中编辑、重排或删除。Apple 模式支持 80/85/90/95/100%；Jikan 模式支持 1–100%。已保存的值在切换算法时保留，Apple 不支持的百分比会显示为不可用。重复的实际百分比不会在胶囊中重复显示，但已保存的条目不会被删除。
 
-## Implementation
+手动点按按 Stack 顺序切换。自动前进按百分比顺序进行，且仅在所显示的估算新近达到其目标时发生。其他读数保持所选状态。已完成的里程碑在整个充电会话中保持完成状态，手动回看某一个不会立即再次前进。全部目标完成后，可见性由「充满后显示（Show after full charge）」控制。没有定时调度功能，也不控制充电上限。
 
-- `Shared/JikanStackItem` supplies immutable items, stable identifiers, and property-list serialization. `JikanStackSettings` reads legacy string arrays and normalizes new records. Settings are written in the new format when the Stack is edited.
-- `TT100` computes configured targets from one refresh. Apple's per-target prediction caches share session/model state and one helper sample per refresh. Jikan's history estimator loads history once and computes cumulative durations.
-- `JikanBatterySnapshot` exposes immutable per-target results. The presentation store latches completed milestones and rejects results from obsolete settings generations. Existing consumers still receive one snapshot per refresh. Main-target fields remain available to the date row and notification.
-- `JikanStackSelection` owns manual selection and advancement. Both pill styles use the selected estimate's target for text and progress.
+## 实现
 
-## Host checks
+- `Shared/JikanStackItem` 提供不可变条目、稳定标识符与属性列表（property-list）序列化。`JikanStackSettings` 读取旧版字符串数组并规范化新记录。编辑 Stack 时设置会以新格式写入。
+- `TT100` 在一次刷新中计算所有已配置的目标。Apple 的按目标预测缓存共享会话/模型状态，且每次刷新只取一个辅助采样。Jikan 的历史估算器只加载一次历史，然后计算累计时长。
+- `JikanBatterySnapshot` 暴露不可变的按目标结果。展示状态存储（presentation store）锁存已完成的里程碑，并拒绝来自过期设置代（generation）的结果。既有使用方仍会每次刷新收到一份快照。主目标字段仍供日期行与通知使用。
+- `JikanStackSelection` 负责手动选择与前进逻辑。两种胶囊样式都使用所选估算的目标来生成文字与进度。
 
-Run `scripts/test-stack-targets.sh`. To check array access and undefined behavior too, run `JIKAN_TEST_SANITIZERS=1 scripts/test-stack-targets.sh`.
+## 宿主机检查
 
-The tests use production settings, selection, presentation-store, and estimator control flow with deterministic battery/model/history doubles. They check migration, validation, stable identity, duplicate handling, progression, manual selection, completed milestones, invalidation, unavailable targets, independent prediction caches, shared helper reads, and batched history. They do not prove model accuracy, private-framework UI behavior, or real charging transitions.
+运行 `scripts/test-stack-targets.sh`。若还要检查数组越界与未定义行为，运行 `JIKAN_TEST_SANITIZERS=1 scripts/test-stack-targets.sh`。
 
-## Device acceptance checks
+这些测试使用生产版的设置、选择、展示存储与估算器控制流，配合确定性的电池/模型/历史测试替身（test doubles）。它们检查迁移、校验、稳定标识、重复处理、前进逻辑、手动选择、已完成里程碑、失效处理、不可用目标、独立预测缓存、共享辅助读取与批量历史。它们不证明模型准确性、私有框架的 UI 行为或真实充电转换。
 
-Run on original Dopamine and RootHide Dopamine after installing the matching release package and respringing:
+## 真机验收检查
 
-1. Open an existing Stack and verify its order and temperature setting are preserved. Add 90% and 100% estimates to a lower main target. Edit, reorder, and remove entries, including numeric entry and slider/VoiceOver adjustments. Confirm duplicate targets cannot be saved and unsupported percentages survive algorithm changes.
-2. While charging, tap through estimates and other readings in both Classic and Progress Ring. Verify each estimate's caption and progress use its own target. Check preview while unplugged and with unavailable battery inputs.
-3. Let the displayed lower target be reached: verify advancement to the next higher unfinished target, including a reading that skips multiple percentages. Check that Wattage, Temperature, or Voltage stays selected during the same transition.
-4. Manually revisit a completed target; wait for another battery refresh and confirm it stays selected. Verify minor fluctuations do not repeat advancement. Disconnect/reconnect and confirm session milestones reset.
-5. Verify the pill stays available after the main target while a higher target is pending. After all targets are reached, check both values of Show after full charge.
-6. Check that the date-row estimate, main-target notification and its preview, still follow the main target, and charging history still records a single session/sample stream.
+安装对应的发布包并注销（respring）后，在原版 Dopamine 与 RootHide Dopamine 上运行：
 
-Host test and package validation results must be reported separately from these device checks.
+1. 打开一个已有的 Stack，验证其顺序与温度设置得以保留。在较低的主目标下添加 90% 与 100% 估算。编辑、重排并删除条目，包括数字输入与滑块/VoiceOver 调整。确认重复目标无法保存，且不支持的百分比在算法切换后仍然保留。
+2. 充电时，在经典与进度环两种样式下逐一点按各估算与其他读数。验证每条估算的说明文字与进度都使用其各自的目标。在未插电以及电池输入不可用的情况下检查预览。
+3. 让所显示的较低目标被达到：验证会前进到下一个更高的未完成目标，包括一次跳过多个百分比的读数。检查在同一转换中功率、温度或电压读数保持选中。
+4. 手动回看一个已完成的目标；等待下一次电池刷新并确认它保持选中。验证小幅波动不会触发重复前进。断开再重连，确认会话里程碑重置。
+5. 在主目标之后、更高目标尚未完成时，验证胶囊保持可用。全部目标达成后，检查「充满后显示」的两个取值。
+6. 检查日期行估算、主目标通知及其预览仍跟随主目标，且充电历史仍只记录单条会话/采样流。
+
+宿主机测试与包验证结果必须与这些真机检查分开报告。
