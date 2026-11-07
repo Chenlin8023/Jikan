@@ -1,28 +1,30 @@
-# Shared Apple input availability
+# 共享的 Apple 输入可用性
 
-SpringBoard owns the assessment in `moe.waru.jikan.estimate-status` under `availability`. Settings reads this record and observes `moe.waru.jikan.apple-availability.changed`; it does not query battery telemetry. The recommendation and automatic algorithm choice use the same target-specific record. Explicit algorithm selection takes precedence, independently of approximation consent.
+> 本文档翻译自英文原版，如有歧义以原文为准。
 
-Only an accepted, current-generation battery refresh publishes an assessment. The probe runs through the Apple estimator even when Jikan is active, using measured inputs only in that case. Apple predictions made with approximation enabled carry the measured-input assessment separately. Cached predictions preserve its sample timestamp, so reusing one prediction cannot establish repeated sensor failures.
+SpringBoard 负责这份评估，存放于 `moe.waru.jikan.estimate-status` 的 `availability` 字段之下。设置面板读取该记录并监听 `moe.waru.jikan.apple-availability.changed`；它不查询电池遥测。推荐项与自动算法选择使用同一条按目标区分的记录。显式算法选择优先，与近似许可无关。
 
-A measured success remains known for that target and kernel/device environment. A target with no measured success needs three consistent, fresh input failures spanning at least 30 seconds of active charging before the automatic choice becomes Jikan. A pause, initialization, target completion, model error, helper transport error, or gap over 60 seconds breaks the failure run. Recovery continues to be checked after a fallback. Unknown status initially chooses Apple without asserting a recommendation.
+只有一次被接受的、当前代（generation）的电池刷新才会发布评估。即使 Jikan 处于激活状态，探测也会经由 Apple 估算器运行，且这种情况下只使用实测输入。开启近似后得出的 Apple 预测会单独携带实测输入评估。缓存的预测保留其采样时间戳，因此复用同一条预测无法构成多次传感器失败记录。
 
-`status`, `missingFeatures`, `powerSource`, and `timestamp` describe the most recent check. `supportedTargets` and `unavailableTargets` determine recommendations. These records contain field names and statuses, not raw battery telemetry. Reset Preferences revokes approximation consent and explicit algorithm selection but preserves observed capability. An OS/kernel change invalidates old capability records.
+一次实测成功会按目标与内核/设备环境被记住。对没有实测成功记录的目标，需要三次一致的、新鲜的输入失败且跨越至少 30 秒的有效充电，自动选择才会变为 Jikan。暂停、初始化、目标完成、模型错误、辅助进程传输错误或超过 60 秒的间隔都会中断失败连击（failure run）。回退之后仍会继续检查恢复。未知状态最初选择 Apple，且不断言推荐。
 
-## Host checks
+`status`、`missingFeatures`、`powerSource` 与 `timestamp` 描述最近一次检查。`supportedTargets` 与 `unavailableTargets` 决定推荐项。这些记录只含字段名与状态，不含原始电池遥测。重置偏好设置会撤销近似许可与显式算法选择，但保留已观测到的能力。系统/内核变更会使旧的能力记录失效。
 
-Run `JIKAN_TEST_SANITIZERS=1 scripts/test-apple-availability.sh` and `JIKAN_TEST_SANITIZERS=1 scripts/test-stack-targets.sh`.
+## 宿主机检查
 
-The suites cover decision transitions, explicit selection, target-specific support, measured helper recovery, cached approximation assessments, failure continuity, generation rejection, and the captured iPhone 13 feature shape. They do not verify cross-process notification delivery or the native Preferences UI on a device.
+运行 `JIKAN_TEST_SANITIZERS=1 scripts/test-apple-availability.sh` 与 `JIKAN_TEST_SANITIZERS=1 scripts/test-stack-targets.sh`。
 
-## Device checks
+测试套件覆盖决策转换、显式选择、按目标的支持判定、实测辅助恢复、缓存的近似评估、失败连续性、代（generation）拒绝，以及捕获到的 iPhone 13 特征形态（feature shape）。它们不验证跨进程通知投递，也不验证真机上的原生偏好设置界面。
 
-On the iPhone 13 running iOS 16.3.1, and on original Dopamine:
+## 真机检查
 
-1. With measured power available, open Algorithm and verify the selected value and recommendation agree with SpringBoard's shared record. Confirm availability updates while the page is open.
-2. On a device with confirmed measured support, select Jikan and then Apple. Verify Apple is selected without a warning and approximation remains disabled. Verify there is no additional approximation toggle.
-3. On a device with confirmed missing measured inputs, select Apple and verify the existing warning appears. Cancel must preserve the previous choice and consent; Proceed explicitly grants approximation consent. Unknown availability and temporary failures after measured success must not trigger this warning. Selecting Jikan or Reset Preferences revokes consent.
-4. After measured Apple success, disconnect, reconnect, and pause charging. Verify these transitions do not replace the known Apple recommendation. Predictions may temporarily be unavailable.
-5. On a device without measured inputs and without an explicit algorithm choice, verify initial unknown status, sustained charging checks before automatic fallback, and recovery if measured inputs become available. Do not disable live sensors to simulate missing inputs; use a naturally affected device or the host fixtures.
-6. Verify added Stack targets, main-target notifications, date-row estimates, and the existing Show Preview behavior still work.
+在运行 iOS 16.3.1 的 iPhone 13 与原版 Dopamine 上：
 
-Package/host validation is separate from these device checks. This change does not establish which input caused the earlier iOS 16.3.1 rejection.
+1. 在实测功率可用时打开 Algorithm 页面，验证所选值与推荐项和 SpringBoard 的共享记录一致。确认页面打开期间可用性会更新。
+2. 在已确认实测支持的设备上，先选 Jikan 再选 Apple。验证选中 Apple 且无警告、近似保持关闭，且不存在额外的近似开关。
+3. 在已确认缺失实测输入的设备上选择 Apple，验证出现原有警告。取消必须保留先前的选择与许可；继续（Proceed）则显式授予近似许可。可用性未知以及实测成功后的临时失败不得触发该警告。选择 Jikan 或重置偏好设置会撤销许可。
+4. 在实测 Apple 成功后，断开、重连并暂停充电。验证这些转换不会替换已知的 Apple 推荐。预测可能暂时不可用。
+5. 在既无实测输入也无显式算法选择的设备上，验证初始的未知状态、自动回退前的持续充电检查，以及实测输入恢复后的恢复行为。不要通过禁用实时传感器来模拟输入缺失；请使用天然受影响的设备或宿主机测试数据（fixtures）。
+6. 验证新增的 Stack 目标、主目标通知、日期行估算与原有的 Show Preview 行为仍然正常。
+
+包/宿主机验证与这些真机检查分开进行。此次变更并未查明之前 iOS 16.3.1 拒绝（预测）的具体输入。
